@@ -1,4 +1,4 @@
-cspace-server-dependencies
-==========================
+server_dependencies
+===================
 
-A puppet module for a CollectionSpacer server instance.
+A puppet module for dependencies required by a CollectionSpace server instance.
