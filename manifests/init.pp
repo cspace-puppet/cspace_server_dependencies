@@ -1,6 +1,6 @@
-# == Class: server-dependencies
+# == Class: server_dependencies
 #
-# Full description of class server-dependencies here.
+# Full description of class server_dependencies here.
 #
 # === Parameters
 #
@@ -23,7 +23,7 @@
 #
 # === Examples
 #
-#  class { server-dependencies:
+#  class { server_dependencies:
 #    servers => [ 'pool.ntp.org', 'ntp.local.company.com' ],
 #  }
 #
@@ -35,7 +35,7 @@
 #
 # Copyright 2013 Your name here, unless otherwise noted.
 #
-class server-dependencies {
+class server_dependencies {
 
 
 }
