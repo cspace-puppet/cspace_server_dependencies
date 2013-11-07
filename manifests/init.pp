@@ -35,7 +35,35 @@
 #
 # Copyright 2013 Your name here, unless otherwise noted.
 #
-class server_dependencies {
+class cspace_server_dependencies {
 
+	package { 'ant':
+	  ensure => latest,
+	}
+	
+	package { 'maven':
+	  ensure => latest,
+	}
+	
+	package { 'wget':
+	  ensure => latest,
+	}
+	
+	package { 'curl':
+	  ensure => latest,
+	}
+	
+	package { 'libaugeas-ruby':
+	  ensure => latest,
+	}
+	
+	package { 'git':
+	  ensure => latest,
+	}
+	
+	package { 'imagemagick':
+	  ensure => latest,
+	}
 
 }
+
