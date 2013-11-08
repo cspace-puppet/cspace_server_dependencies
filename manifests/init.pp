@@ -64,6 +64,10 @@ class cspace_server_dependencies {
 	package { 'imagemagick':
 	  ensure => latest,
 	}
+	
+	package { 'ftp':
+	  ensure => latest,
+	}
 
 }
 
