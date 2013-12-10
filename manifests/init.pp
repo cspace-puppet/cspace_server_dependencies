@@ -1,6 +1,6 @@
 # == Class: server_dependencies
 #
-# Full description of class server_dependencies here.
+# Manages prerequisites / dependencies for building a CollectionSpace server instance.
 #
 # === Parameters
 #
@@ -37,37 +37,37 @@
 #
 class cspace_server_dependencies {
 
-	package { 'ant':
-	  ensure => latest,
-	}
-	
-	package { 'maven':
-	  ensure => latest,
-	}
-	
-	package { 'wget':
-	  ensure => latest,
-	}
-	
-	package { 'curl':
-	  ensure => latest,
-	}
-	
-	package { 'libaugeas-ruby':
-	  ensure => latest,
-	}
-	
-	package { 'git':
-	  ensure => latest,
-	}
-	
-	package { 'imagemagick':
-	  ensure => latest,
-	}
-	
-	package { 'ftp':
-	  ensure => latest,
-	}
+  package { 'ant':
+    ensure => latest,
+  }
+
+  package { 'maven':
+    ensure => latest,
+  }
+
+  package { 'wget':
+    ensure => latest,
+  }
+
+  package { 'curl':
+    ensure => latest,
+  }
+
+  package { 'libaugeas-ruby':
+    ensure => latest,
+  }
+
+  package { 'git':
+    ensure => latest,
+  }
+
+  package { 'imagemagick':
+    ensure => latest,
+  }
+
+  package { 'ftp':
+    ensure => latest,
+  }
 
 }
 
