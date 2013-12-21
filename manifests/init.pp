@@ -35,39 +35,74 @@
 #
 # Copyright 2013 Your name here, unless otherwise noted.
 #
+
+include cspace_environment::osfamily
+
 class cspace_server_dependencies {
-
-  package { 'ant':
-    ensure => latest,
-  }
-
-  package { 'maven':
-    ensure => latest,
-  }
-
-  package { 'wget':
-    ensure => latest,
-  }
-
-  package { 'curl':
-    ensure => latest,
-  }
-
-  package { 'libaugeas-ruby':
-    ensure => latest,
-  }
-
-  package { 'git':
-    ensure => latest,
-  }
-
-  package { 'imagemagick':
-    ensure => latest,
-  }
-
-  package { 'ftp':
-    ensure => latest,
-  }
-
+  
+  $os_family        = $cspace_environment::osfamily::os_family
+  
+  case $os_family {
+  
+    # Packages whose names are identical between the two major Linux OS families
+    RedHat, Debian: {
+      package { 'ant':
+        ensure => latest,
+      }
+      package { 'curl':
+        ensure => latest,
+      }
+      package { 'ftp':
+        ensure => latest,
+      }
+      package { 'git':
+        ensure => latest,
+      }
+      package { 'maven':
+        ensure => latest,
+      }
+      package { 'wget':
+        ensure => latest,
+      }
+    }
+    
+    # OS X
+    darwin: {
+    }
+    
+    # Microsoft Windows
+    windows: {
+    }
+  
+    default: {
+    }
+    
+  } # end case
+  
+  # Packages whose names differ between the two major Linux OS families
+  case $os_family {
+    RedHat: {
+      package { 'ImageMagick':
+        ensure => latest,
+      }
+      # The following package (and its equivalent for Debian) is required
+      # by some Puppet modules (e.g. postgres) for editing config files.
+      package { 'ruby-augeas':
+        ensure => latest,
+      }
+    }
+    Debian: {
+      package { 'imagemagick':
+        ensure => latest,
+      }
+      # Equivalent to RedHat's 'ruby-augeas', above.
+      package { 'libaugeas-ruby':
+        ensure => latest,
+      }
+    }
+    default: {
+    }
+  } # end case
+  
 }
 
