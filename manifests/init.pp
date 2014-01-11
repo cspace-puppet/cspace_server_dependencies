@@ -36,11 +36,23 @@
 # Copyright 2013 Your name here, unless otherwise noted.
 #
 
+include cspace_environment::execpaths
 include cspace_environment::osfamily
 
 class cspace_server_dependencies {
   
+  $linux_exec_paths = $cspace_environment::execpaths::linux_default_exec_paths
   $os_family        = $cspace_environment::osfamily::os_family
+  
+  case $os_family {
+    Debian: {
+      $exec_paths = $linux_exec_paths
+      exec { 'Update apt-get to reflect current packages and versions' :
+        command => 'apt-get -y update',
+        path    => $exec_paths,
+      }
+    }
+  }
   
   case $os_family {
   
