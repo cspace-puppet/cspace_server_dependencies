@@ -51,15 +51,54 @@ class cspace_server_dependencies {
         command => 'apt-get -y update',
         path    => $exec_paths,
       }
-    }
-  }
-  
-  case $os_family {
-  
-    # Packages whose names are identical between the two major Linux OS families
-    RedHat, Debian: {
       package { 'ant':
+        ensure  => latest,
+        require => Exec [ 'Update apt-get before dependencies update to reflect current packages' ],
+      }
+      package { 'curl':
         ensure => latest,
+        require => Exec [ 'Update apt-get before dependencies update to reflect current packages' ],
+      }
+      package { 'ftp':
+        ensure => latest,
+        require => Exec [ 'Update apt-get before dependencies update to reflect current packages' ],
+      }
+      package { 'git':
+        ensure => latest,
+        require => Exec [ 'Update apt-get before dependencies update to reflect current packages' ],
+      }
+      package { 'maven':
+        ensure => latest,
+        require => Exec [ 'Update apt-get before dependencies update to reflect current packages' ],
+      }
+      # 'wget' likely would have already been installed as part of the current bootstrap script; see:
+      # https://github.com/cspace-puppet/cspace_puppet_bootstrap
+      # This resource helps ensure its presence - and its latest available version,
+      # as per platform-specific repositories - even if that bootstrap script
+      # hadn't previously been run or if the 'wget' package was subsequently removed.
+      package { 'wget':
+        ensure => latest,
+        require => Exec [ 'Update apt-get before dependencies update to reflect current packages' ],
+      }
+      # Packages whose names differ between Debian- and RedHat-based distros:
+      #
+      # Equivalent to RedHat's 'ImageMagick', below.
+      package { 'imagemagick':
+        ensure => latest,
+        require => Exec [ 'Update apt-get before dependencies update to reflect current packages' ],
+      }
+      # The following package (and its equivalent for RedHat-based distros) is required
+      # by some Puppet modules (e.g. postgres) for editing config files.
+      # Equivalent to RedHat's 'ruby-augeas', below.
+      package { 'libaugeas-ruby':
+        ensure => latest,
+        require => Exec [ 'Update apt-get before dependencies update to reflect current packages' ],
+      }     
+    }
+
+    RedHat: {
+      package { 'ant':
+        ensure  => latest,
       }
       package { 'curl':
         ensure => latest,
@@ -74,6 +113,16 @@ class cspace_server_dependencies {
         ensure => latest,
       }
       package { 'wget':
+        ensure => latest,
+      }
+      # Packages whose names differ between Debian- and RedHat-based distros:
+      #
+      # Equivalent to Debian's 'imagemagick', above.
+      package { 'ImageMagick':
+        ensure => latest,
+      }
+      # Equivalent to Debian's 'libaugeas-ruby', above.      
+      package { 'ruby-augeas':
         ensure => latest,
       }
     }
@@ -91,30 +140,7 @@ class cspace_server_dependencies {
     
   } # end case
   
-  # Packages whose names differ between the two major Linux OS families
-  case $os_family {
-    RedHat: {
-      package { 'ImageMagick':
-        ensure => latest,
-      }
-      # The following package (and its equivalent for Debian) is required
-      # by some Puppet modules (e.g. postgres) for editing config files.
-      package { 'ruby-augeas':
-        ensure => latest,
-      }
-    }
-    Debian: {
-      package { 'imagemagick':
-        ensure => latest,
-      }
-      # Equivalent to RedHat's 'ruby-augeas', above.
-      package { 'libaugeas-ruby':
-        ensure => latest,
-      }
-    }
-    default: {
-    }
-  } # end case
+
   
 }
 
