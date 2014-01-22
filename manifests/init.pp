@@ -47,6 +47,10 @@ class cspace_server_dependencies {
   case $os_family {
     Debian: {
       $exec_paths = $linux_exec_paths
+      # At least under Ubuntu 13.10, it's necessary to first update the list of packages
+      # in order to successfully install the 'imagemagick' package, below. Without doing so,
+      # that install fails with '404 Not Found' errors accessing required packages in
+      # http://archive.ubuntu.com/ubuntu/pool/main/c/cups/...
       exec { 'Update apt-get before dependencies update to reflect current packages' :
         command => 'apt-get -y update',
         path    => $exec_paths,
