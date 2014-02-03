@@ -44,90 +44,178 @@ class cspace_server_dependencies {
   $linux_exec_paths = $cspace_environment::execpaths::linux_default_exec_paths
   $os_family        = $cspace_environment::osfamily::os_family
   
+  notify{ 'Ensuring server dependencies':
+    message => "Ensuring the availability of software required by a CollectionSpace server ...",
+  }
+  notify{ 'Ensuring Ant':
+    message => "Ensuring the availability of Apache Ant ...",
+  }
+  notify{ 'Ensuring Augeas':
+    message => "Ensuring the availability of Augeas libraries for Ruby ...",
+  }
+  notify{ 'Ensuring Curl':
+    message => "Ensuring the availability of Curl ...",
+  }
+  notify{ 'Ensuring Ftp':
+    message => "Ensuring the availability of an FTP client ...",
+  }
+  notify{ 'Ensuring Git':
+    message => "Ensuring the availability of a Git client ...",
+  }
+  notify{ 'Ensuring ImageMagick':
+    message => "Ensuring the availability of ImageMagick ...",
+  }
+  notify{ 'Ensuring Maven':
+    message => "Ensuring the availability of Apache Maven ...",
+  }
+  notify{ 'Ensuring Wget':
+    message => "Ensuring the availability of Wget ...",
+  }
+          
   case $os_family {
     Debian: {
       $exec_paths = $linux_exec_paths
-      # At least under Ubuntu 13.10, it's necessary to first update the list of packages
+      # At least under Ubuntu 13.10, it was necessary to first update the list of apt-get packages
       # in order to successfully install the 'imagemagick' package, below. Without doing so,
-      # that install fails with '404 Not Found' errors accessing required packages in
+      # that install failed with '404 Not Found' errors attempting to access dependent packages in
       # http://archive.ubuntu.com/ubuntu/pool/main/c/cups/...
       exec { 'Update apt-get before dependencies update to reflect current packages' :
         command => 'apt-get -y update',
         path    => $exec_paths,
+        require => Notify [ 'Ensuring availability of server dependencies' ],
       }
       package { 'ant':
         ensure  => latest,
-        require => Exec [ 'Update apt-get before dependencies update to reflect current packages' ],
+        require => [
+          Notify [ 'Ensuring server dependencies' ],
+          Notify [ 'Ensuring Ant' ],
+          Exec [ 'Update apt-get before dependencies update to reflect current packages' ],
+        ]
       }
       package { 'curl':
-        ensure => latest,
-        require => Exec [ 'Update apt-get before dependencies update to reflect current packages' ],
+        ensure  => latest,
+        require => [
+          Notify [ 'Ensuring server dependencies' ],
+          Notify [ 'Ensuring Curl' ],
+          Exec [ 'Update apt-get before dependencies update to reflect current packages' ],
+        ]
       }
       package { 'ftp':
-        ensure => latest,
-        require => Exec [ 'Update apt-get before dependencies update to reflect current packages' ],
+        ensure  => latest,
+        require => [
+          Notify [ 'Ensuring server dependencies' ],
+          Notify [ 'Ensuring Ftp' ],
+          Exec [ 'Update apt-get before dependencies update to reflect current packages' ],
+        ]
       }
       package { 'git':
-        ensure => latest,
-        require => Exec [ 'Update apt-get before dependencies update to reflect current packages' ],
+        ensure  => latest,
+        require => [
+          Notify [ 'Ensuring server dependencies' ],
+          Notify [ 'Ensuring Git' ],
+          Exec [ 'Update apt-get before dependencies update to reflect current packages' ],
+        ]
       }
       package { 'maven':
-        ensure => latest,
-        require => Exec [ 'Update apt-get before dependencies update to reflect current packages' ],
+        ensure  => latest,
+        require => [
+          Notify [ 'Ensuring server dependencies' ],
+          Notify [ 'Ensuring Maven' ],
+          Exec [ 'Update apt-get before dependencies update to reflect current packages' ],
+        ]
       }
-      # 'wget' likely would have already been installed as part of the current bootstrap script; see:
-      # https://github.com/cspace-puppet/cspace_puppet_bootstrap
-      # This resource helps ensure its presence - and its latest available version,
-      # as per platform-specific repositories - even if that bootstrap script
-      # hadn't previously been run or if the 'wget' package was subsequently removed.
       package { 'wget':
-        ensure => latest,
-        require => Exec [ 'Update apt-get before dependencies update to reflect current packages' ],
+        ensure  => latest,
+        require => [
+          Notify [ 'Ensuring server dependencies' ],
+          Notify [ 'Ensuring Wget' ],
+          Exec [ 'Update apt-get before dependencies update to reflect current packages' ],
+        ]
       }
       # Packages whose names differ between Debian- and RedHat-based distros:
       #
       # Equivalent to RedHat's 'ImageMagick', below.
       package { 'imagemagick':
-        ensure => latest,
-        require => Exec [ 'Update apt-get before dependencies update to reflect current packages' ],
+        ensure  => latest,
+        require => [
+          Notify [ 'Ensuring server dependencies' ],
+          Notify [ 'Ensuring ImageMagick' ],
+          Exec [ 'Update apt-get before dependencies update to reflect current packages' ],
+        ]
       }
       # The following package (and its equivalent for RedHat-based distros) is required
       # by some Puppet modules (e.g. postgres) for editing config files.
       # Equivalent to RedHat's 'ruby-augeas', below.
       package { 'libaugeas-ruby':
-        ensure => latest,
-        require => Exec [ 'Update apt-get before dependencies update to reflect current packages' ],
+        ensure  => latest,
+        require => [
+          Notify [ 'Ensuring server dependencies' ],
+          Notify [ 'Ensuring Augeas' ],
+          Exec [ 'Update apt-get before dependencies update to reflect current packages' ],
+        ]
       }     
     }
 
     RedHat: {
       package { 'ant':
         ensure  => latest,
+        require => [
+          Notify [ 'Ensuring server dependencies' ],
+          Notify [ 'Ensuring Ant' ],
+        ]
       }
       package { 'curl':
-        ensure => latest,
+        ensure  => latest,
+        require => [
+          Notify [ 'Ensuring server dependencies' ],
+          Notify [ 'Ensuring Curl' ],
+        ]
       }
       package { 'ftp':
-        ensure => latest,
+        ensure  => latest,
+        require => [
+          Notify [ 'Ensuring server dependencies' ],
+          Notify [ 'Ensuring Ftp' ],
+        ]
       }
       package { 'git':
-        ensure => latest,
+        ensure  => latest,
+        require => [
+          Notify [ 'Ensuring server dependencies' ],
+          Notify [ 'Ensuring Git' ],
+        ]
       }
       package { 'maven':
-        ensure => latest,
+        ensure  => latest,
+        require => [
+          Notify [ 'Ensuring server dependencies' ],
+          Notify [ 'Ensuring Maven' ],
+        ]
       }
       package { 'wget':
-        ensure => latest,
+        ensure  => latest,
+        require => [
+          Notify [ 'Ensuring server dependencies' ],
+          Notify [ 'Ensuring Wget' ],
+        ]
       }
       # Packages whose names differ between Debian- and RedHat-based distros:
       #
       # Equivalent to Debian's 'imagemagick', above.
       package { 'ImageMagick':
-        ensure => latest,
+        ensure  => latest,
+        require => [
+          Notify [ 'Ensuring server dependencies' ],
+          Notify [ 'Ensuring ImageMagick' ],
+        ]
       }
       # Equivalent to Debian's 'libaugeas-ruby', above.      
       package { 'ruby-augeas':
-        ensure => latest,
+        ensure  => latest,
+        require => [
+          Notify [ 'Ensuring server dependencies' ],
+          Notify [ 'Ensuring Augeas' ],
+        ]
       }
     }
     
