@@ -91,6 +91,16 @@ class cspace_server_dependencies {
       exec { 'Update apt-get before dependencies update to reflect current packages' :
         command => 'apt-get -y update',
         path    => $exec_paths,
+        before  => [
+          Notify [ 'Ensuring Ant' ],
+          Notify [ 'Ensuring Augeas' ],
+          Notify [ 'Ensuring Curl' ],
+          Notify [ 'Ensuring Ftp' ],
+          Notify [ 'Ensuring Git' ],
+          Notify [ 'Ensuring ImageMagick' ],
+          Notify [ 'Ensuring Maven' ],
+          Notify [ 'Ensuring Wget' ],
+        ],
         require => Notify [ 'Ensuring server dependencies' ],
       }
       package { 'ant':
@@ -98,42 +108,42 @@ class cspace_server_dependencies {
         require => [
           Notify [ 'Ensuring Ant' ],
           Exec [ 'Update apt-get before dependencies update to reflect current packages' ],
-        ]
+        ],
       }
       package { 'curl':
         ensure  => latest,
         require => [
           Notify [ 'Ensuring Curl' ],
           Exec [ 'Update apt-get before dependencies update to reflect current packages' ],
-        ]
+        ],
       }
       package { 'ftp':
         ensure  => latest,
         require => [
           Notify [ 'Ensuring Ftp' ],
           Exec [ 'Update apt-get before dependencies update to reflect current packages' ],
-        ]
+        ],
       }
       package { 'git':
         ensure  => latest,
         require => [
           Notify [ 'Ensuring Git' ],
           Exec [ 'Update apt-get before dependencies update to reflect current packages' ],
-        ]
+        ],
       }
       package { 'maven':
         ensure  => latest,
         require => [
           Notify [ 'Ensuring Maven' ],
           Exec [ 'Update apt-get before dependencies update to reflect current packages' ],
-        ]
+        ],
       }
       package { 'wget':
         ensure  => latest,
         require => [
           Notify [ 'Ensuring Wget' ],
           Exec [ 'Update apt-get before dependencies update to reflect current packages' ],
-        ]
+        ],
       }
       # Packages whose names differ between Debian- and RedHat-based distros:
       #
@@ -143,7 +153,7 @@ class cspace_server_dependencies {
         require => [
           Notify [ 'Ensuring ImageMagick' ],
           Exec [ 'Update apt-get before dependencies update to reflect current packages' ],
-        ]
+        ],
       }
       # The following package (and its equivalent for RedHat-based distros) is required
       # by some Puppet modules (e.g. postgres) for editing config files.
@@ -153,62 +163,46 @@ class cspace_server_dependencies {
         require => [
           Notify [ 'Ensuring Augeas' ],
           Exec [ 'Update apt-get before dependencies update to reflect current packages' ],
-        ]
+        ],
       }     
     }
 
     RedHat: {
       package { 'ant':
         ensure  => latest,
-        require => [
-          Notify [ 'Ensuring Ant' ],
-        ]
+        require => Notify [ 'Ensuring Ant' ],
       }
       package { 'curl':
         ensure  => latest,
-        require => [
-          Notify [ 'Ensuring Curl' ],
-        ]
+        require => Notify [ 'Ensuring Curl' ],
       }
       package { 'ftp':
         ensure  => latest,
-        require => [
-          Notify [ 'Ensuring Ftp' ],
-        ]
+        require => Notify [ 'Ensuring Ftp' ],
       }
       package { 'git':
         ensure  => latest,
-        require => [
-          Notify [ 'Ensuring Git' ],
-        ]
+        require => Notify [ 'Ensuring Git' ],
       }
       package { 'maven':
         ensure  => latest,
-        require => [
-          Notify [ 'Ensuring Maven' ],
-        ]
+        require => Notify [ 'Ensuring Maven' ],
       }
       package { 'wget':
         ensure  => latest,
-        require => [
-          Notify [ 'Ensuring Wget' ],
-        ]
+        require => Notify [ 'Ensuring Wget' ],
       }
       # Packages whose names differ between Debian- and RedHat-based distros:
       #
       # Equivalent to Debian's 'imagemagick', above.
       package { 'ImageMagick':
         ensure  => latest,
-        require => [
-          Notify [ 'Ensuring ImageMagick' ],
-        ]
+        require => Notify [ 'Ensuring ImageMagick' ],
       }
       # Equivalent to Debian's 'libaugeas-ruby', above.      
       package { 'ruby-augeas':
         ensure  => latest,
-        require => [
-          Notify [ 'Ensuring Augeas' ],
-        ]
+        require => Notify [ 'Ensuring Augeas' ],
       }
     }
     
