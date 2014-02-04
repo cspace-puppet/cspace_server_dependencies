@@ -46,30 +46,39 @@ class cspace_server_dependencies {
   
   notify{ 'Ensuring server dependencies':
     message => "Ensuring the availability of software required by a CollectionSpace server ...",
+    withpath => false,
   }
   notify{ 'Ensuring Ant':
     message => "Ensuring the availability of Apache Ant ...",
+    require => Notify [ 'Ensuring server dependencies' ],
   }
   notify{ 'Ensuring Augeas':
     message => "Ensuring the availability of Augeas libraries for Ruby ...",
+    require => Notify [ 'Ensuring server dependencies' ],
   }
   notify{ 'Ensuring Curl':
     message => "Ensuring the availability of Curl ...",
+    require => Notify [ 'Ensuring server dependencies' ],
   }
   notify{ 'Ensuring Ftp':
     message => "Ensuring the availability of an FTP client ...",
+    require => Notify [ 'Ensuring server dependencies' ],
   }
   notify{ 'Ensuring Git':
     message => "Ensuring the availability of a Git client ...",
+    require => Notify [ 'Ensuring server dependencies' ],
   }
   notify{ 'Ensuring ImageMagick':
     message => "Ensuring the availability of ImageMagick ...",
+    require => Notify [ 'Ensuring server dependencies' ],
   }
   notify{ 'Ensuring Maven':
     message => "Ensuring the availability of Apache Maven ...",
+    require => Notify [ 'Ensuring server dependencies' ],
   }
   notify{ 'Ensuring Wget':
     message => "Ensuring the availability of Wget ...",
+    require => Notify [ 'Ensuring server dependencies' ],
   }
           
   case $os_family {
@@ -82,12 +91,11 @@ class cspace_server_dependencies {
       exec { 'Update apt-get before dependencies update to reflect current packages' :
         command => 'apt-get -y update',
         path    => $exec_paths,
-        require => Notify [ 'Ensuring availability of server dependencies' ],
+        require => Notify [ 'Ensuring server dependencies' ],
       }
       package { 'ant':
         ensure  => latest,
         require => [
-          Notify [ 'Ensuring server dependencies' ],
           Notify [ 'Ensuring Ant' ],
           Exec [ 'Update apt-get before dependencies update to reflect current packages' ],
         ]
@@ -95,7 +103,6 @@ class cspace_server_dependencies {
       package { 'curl':
         ensure  => latest,
         require => [
-          Notify [ 'Ensuring server dependencies' ],
           Notify [ 'Ensuring Curl' ],
           Exec [ 'Update apt-get before dependencies update to reflect current packages' ],
         ]
@@ -103,7 +110,6 @@ class cspace_server_dependencies {
       package { 'ftp':
         ensure  => latest,
         require => [
-          Notify [ 'Ensuring server dependencies' ],
           Notify [ 'Ensuring Ftp' ],
           Exec [ 'Update apt-get before dependencies update to reflect current packages' ],
         ]
@@ -111,7 +117,6 @@ class cspace_server_dependencies {
       package { 'git':
         ensure  => latest,
         require => [
-          Notify [ 'Ensuring server dependencies' ],
           Notify [ 'Ensuring Git' ],
           Exec [ 'Update apt-get before dependencies update to reflect current packages' ],
         ]
@@ -119,7 +124,6 @@ class cspace_server_dependencies {
       package { 'maven':
         ensure  => latest,
         require => [
-          Notify [ 'Ensuring server dependencies' ],
           Notify [ 'Ensuring Maven' ],
           Exec [ 'Update apt-get before dependencies update to reflect current packages' ],
         ]
@@ -127,7 +131,6 @@ class cspace_server_dependencies {
       package { 'wget':
         ensure  => latest,
         require => [
-          Notify [ 'Ensuring server dependencies' ],
           Notify [ 'Ensuring Wget' ],
           Exec [ 'Update apt-get before dependencies update to reflect current packages' ],
         ]
@@ -138,7 +141,6 @@ class cspace_server_dependencies {
       package { 'imagemagick':
         ensure  => latest,
         require => [
-          Notify [ 'Ensuring server dependencies' ],
           Notify [ 'Ensuring ImageMagick' ],
           Exec [ 'Update apt-get before dependencies update to reflect current packages' ],
         ]
@@ -149,7 +151,6 @@ class cspace_server_dependencies {
       package { 'libaugeas-ruby':
         ensure  => latest,
         require => [
-          Notify [ 'Ensuring server dependencies' ],
           Notify [ 'Ensuring Augeas' ],
           Exec [ 'Update apt-get before dependencies update to reflect current packages' ],
         ]
@@ -160,42 +161,36 @@ class cspace_server_dependencies {
       package { 'ant':
         ensure  => latest,
         require => [
-          Notify [ 'Ensuring server dependencies' ],
           Notify [ 'Ensuring Ant' ],
         ]
       }
       package { 'curl':
         ensure  => latest,
         require => [
-          Notify [ 'Ensuring server dependencies' ],
           Notify [ 'Ensuring Curl' ],
         ]
       }
       package { 'ftp':
         ensure  => latest,
         require => [
-          Notify [ 'Ensuring server dependencies' ],
           Notify [ 'Ensuring Ftp' ],
         ]
       }
       package { 'git':
         ensure  => latest,
         require => [
-          Notify [ 'Ensuring server dependencies' ],
           Notify [ 'Ensuring Git' ],
         ]
       }
       package { 'maven':
         ensure  => latest,
         require => [
-          Notify [ 'Ensuring server dependencies' ],
           Notify [ 'Ensuring Maven' ],
         ]
       }
       package { 'wget':
         ensure  => latest,
         require => [
-          Notify [ 'Ensuring server dependencies' ],
           Notify [ 'Ensuring Wget' ],
         ]
       }
@@ -205,7 +200,6 @@ class cspace_server_dependencies {
       package { 'ImageMagick':
         ensure  => latest,
         require => [
-          Notify [ 'Ensuring server dependencies' ],
           Notify [ 'Ensuring ImageMagick' ],
         ]
       }
@@ -213,7 +207,6 @@ class cspace_server_dependencies {
       package { 'ruby-augeas':
         ensure  => latest,
         require => [
-          Notify [ 'Ensuring server dependencies' ],
           Notify [ 'Ensuring Augeas' ],
         ]
       }
@@ -232,7 +225,4 @@ class cspace_server_dependencies {
     
   } # end case
   
-
-  
 }
-
