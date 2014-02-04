@@ -9,6 +9,7 @@
 # Learn more about module testing here:
 # http://docs.puppetlabs.com/guides/tests_smoke.html
 #
+include cspace_environment::execpaths
 include cspace_environment::osfamily
 
 class { 'cspace_server_dependencies': }
