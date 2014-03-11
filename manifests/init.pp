@@ -1,4 +1,4 @@
-# == Class: server_dependencies
+# == Class: cspace_server_dependencies
 #
 # Manages prerequisites / dependencies for building a CollectionSpace server instance.
 #
@@ -45,39 +45,39 @@ class cspace_server_dependencies {
   $os_family        = $cspace_environment::osfamily::os_family
   
   notify{ 'Ensuring server dependencies':
-    message => "Ensuring the availability of software required by a CollectionSpace server ...",
+    message  => 'Ensuring the availability of software required by a CollectionSpace server ...',
     withpath => false,
   }
   notify{ 'Ensuring Ant':
-    message => "Ensuring the availability of Apache Ant ...",
+    message => 'Ensuring the availability of Apache Ant ...',
     require => Notify [ 'Ensuring server dependencies' ],
   }
   notify{ 'Ensuring Augeas':
-    message => "Ensuring the availability of Augeas libraries for Ruby ...",
+    message => 'Ensuring the availability of Augeas libraries for Ruby ...',
     require => Notify [ 'Ensuring server dependencies' ],
   }
   notify{ 'Ensuring Curl':
-    message => "Ensuring the availability of Curl ...",
+    message => 'Ensuring the availability of Curl ...',
     require => Notify [ 'Ensuring server dependencies' ],
   }
   notify{ 'Ensuring Ftp':
-    message => "Ensuring the availability of an FTP client ...",
+    message => 'Ensuring the availability of an FTP client ...',
     require => Notify [ 'Ensuring server dependencies' ],
   }
   notify{ 'Ensuring Git':
-    message => "Ensuring the availability of a Git client ...",
+    message => 'Ensuring the availability of a Git client ...',
     require => Notify [ 'Ensuring server dependencies' ],
   }
   notify{ 'Ensuring ImageMagick':
-    message => "Ensuring the availability of ImageMagick ...",
+    message => 'Ensuring the availability of ImageMagick ...',
     require => Notify [ 'Ensuring server dependencies' ],
   }
   notify{ 'Ensuring Maven':
-    message => "Ensuring the availability of Apache Maven ...",
+    message => 'Ensuring the availability of Apache Maven ...',
     require => Notify [ 'Ensuring server dependencies' ],
   }
   notify{ 'Ensuring Wget':
-    message => "Ensuring the availability of Wget ...",
+    message => 'Ensuring the availability of Wget ...',
     require => Notify [ 'Ensuring server dependencies' ],
   }
           
@@ -89,9 +89,10 @@ class cspace_server_dependencies {
       # that install failed with '404 Not Found' errors attempting to access dependent packages in
       # http://archive.ubuntu.com/ubuntu/pool/main/c/cups/...
       exec { 'Update apt-get before dependencies update to reflect current packages' :
-        command => 'apt-get -y update',
-        path    => $exec_paths,
-        before  => [
+        command   => 'apt-get -y update',
+        path      => $exec_paths,
+        logoutput => on_failure,
+        before    => [
           Notify [ 'Ensuring Ant' ],
           Notify [ 'Ensuring Augeas' ],
           Notify [ 'Ensuring Curl' ],
@@ -101,7 +102,7 @@ class cspace_server_dependencies {
           Notify [ 'Ensuring Maven' ],
           Notify [ 'Ensuring Wget' ],
         ],
-        require => Notify [ 'Ensuring server dependencies' ],
+        require   => Notify [ 'Ensuring server dependencies' ],
       }
       package { 'ant':
         ensure  => latest,
