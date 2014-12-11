@@ -1,0 +1,10 @@
+{
+  "name": "collectionspace-cspace_server_dependencies",
+  "version": "4.1.1",
+  "summary": "Ensures the availability of a variety of utility and application dependencies for a CollectionSpace server installation",
+  "author": "CollectionSpace",
+  "dependencies": [],
+  "source": "https://github.com/cspace-puppet/cspace_server_dependencies.git",
+  "project_page": "http://wiki.collectionspace.org",
+  "license": " Educational Community License, Version 2.0"
+}
