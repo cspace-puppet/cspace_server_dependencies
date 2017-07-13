@@ -159,7 +159,7 @@ class cspace_server_dependencies {
       # The following package (and its equivalent for RedHat-based distros) is required
       # by some Puppet modules (e.g. postgres) for editing config files.
       # Equivalent to RedHat's 'ruby-augeas', below.
-      package { 'libaugeas-ruby':
+      package { 'ruby-augeas':
         ensure  => latest,
         require => [
           Notify [ 'Ensuring Augeas' ],
