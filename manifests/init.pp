@@ -40,49 +40,49 @@ include cspace_environment::execpaths
 include cspace_environment::osfamily
 
 class cspace_server_dependencies {
-  
+
   $linux_exec_paths = $cspace_environment::execpaths::linux_default_exec_paths
   $os_family        = $cspace_environment::osfamily::os_family
-  
+
   notify{ 'Ensuring server dependencies':
     message  => 'Ensuring the availability of software required by a CollectionSpace server ...',
     withpath => false,
   }
   notify{ 'Ensuring Ant':
     message => 'Ensuring the availability of Apache Ant ...',
-    require => Notify [ 'Ensuring server dependencies' ],
+    require => Notify['Ensuring server dependencies'],
   }
   notify{ 'Ensuring Augeas':
     message => 'Ensuring the availability of Augeas libraries for Ruby ...',
-    require => Notify [ 'Ensuring server dependencies' ],
+    require => Notify['Ensuring server dependencies'],
   }
   notify{ 'Ensuring Curl':
     message => 'Ensuring the availability of Curl ...',
-    require => Notify [ 'Ensuring server dependencies' ],
+    require => Notify['Ensuring server dependencies'],
   }
   notify{ 'Ensuring Ftp':
     message => 'Ensuring the availability of an FTP client ...',
-    require => Notify [ 'Ensuring server dependencies' ],
+    require => Notify['Ensuring server dependencies'],
   }
   notify{ 'Ensuring Git':
     message => 'Ensuring the availability of a Git client ...',
-    require => Notify [ 'Ensuring server dependencies' ],
+    require => Notify['Ensuring server dependencies'],
   }
   notify{ 'Ensuring ImageMagick':
     message => 'Ensuring the availability of ImageMagick ...',
-    require => Notify [ 'Ensuring server dependencies' ],
+    require => Notify['Ensuring server dependencies'],
   }
   notify{ 'Ensuring Maven':
     message => 'Ensuring the availability of Apache Maven ...',
-    require => Notify [ 'Ensuring server dependencies' ],
+    require => Notify['Ensuring server dependencies'],
   }
   notify{ 'Ensuring Wget':
     message => 'Ensuring the availability of Wget ...',
-    require => Notify [ 'Ensuring server dependencies' ],
+    require => Notify['Ensuring server dependencies'],
   }
-          
+
   case $os_family {
-    Debian: {
+    'Debian': {
       $exec_paths = $linux_exec_paths
       # At least under Ubuntu 13.10, it was necessary to first update the list of apt-get packages
       # in order to successfully install the 'imagemagick' package, below. Without doing so,
@@ -93,57 +93,57 @@ class cspace_server_dependencies {
         path      => $exec_paths,
         logoutput => on_failure,
         before    => [
-          Notify [ 'Ensuring Ant' ],
-          Notify [ 'Ensuring Augeas' ],
-          Notify [ 'Ensuring Curl' ],
-          Notify [ 'Ensuring Ftp' ],
-          Notify [ 'Ensuring Git' ],
-          Notify [ 'Ensuring ImageMagick' ],
-          Notify [ 'Ensuring Maven' ],
-          Notify [ 'Ensuring Wget' ],
+          Notify['Ensuring Ant'],
+          Notify['Ensuring Augeas'],
+          Notify['Ensuring Curl'],
+          Notify['Ensuring Ftp'],
+          Notify['Ensuring Git'],
+          Notify['Ensuring ImageMagick'],
+          Notify['Ensuring Maven'],
+          Notify['Ensuring Wget'],
         ],
-        require   => Notify [ 'Ensuring server dependencies' ],
+        require   => Notify['Ensuring server dependencies'],
       }
       package { 'ant':
         ensure  => latest,
         require => [
-          Notify [ 'Ensuring Ant' ],
-          Exec [ 'Update apt-get before dependencies update to reflect current packages' ],
+          Notify['Ensuring Ant'],
+          Exec['Update apt-get before dependencies update to reflect current packages'],
         ],
       }
       package { 'curl':
         ensure  => latest,
         require => [
-          Notify [ 'Ensuring Curl' ],
-          Exec [ 'Update apt-get before dependencies update to reflect current packages' ],
+          Notify['Ensuring Curl'],
+          Exec['Update apt-get before dependencies update to reflect current packages'],
         ],
       }
       package { 'ftp':
         ensure  => latest,
         require => [
-          Notify [ 'Ensuring Ftp' ],
-          Exec [ 'Update apt-get before dependencies update to reflect current packages' ],
+          Notify['Ensuring Ftp'],
+          Exec['Update apt-get before dependencies update to reflect current packages'],
         ],
       }
       package { 'git':
         ensure  => latest,
         require => [
-          Notify [ 'Ensuring Git' ],
-          Exec [ 'Update apt-get before dependencies update to reflect current packages' ],
+          Notify['Ensuring Git'],
+          Exec['Update apt-get before dependencies update to reflect current packages'],
         ],
       }
       package { 'maven':
         ensure  => latest,
         require => [
-          Notify [ 'Ensuring Maven' ],
-          Exec [ 'Update apt-get before dependencies update to reflect current packages' ],
+          Notify['Ensuring Maven'],
+          Exec['Update apt-get before dependencies update to reflect current packages'],
         ],
       }
       package { 'wget':
         ensure  => latest,
         require => [
-          Notify [ 'Ensuring Wget' ],
-          Exec [ 'Update apt-get before dependencies update to reflect current packages' ],
+          Notify['Ensuring Wget'],
+          Exec['Update apt-get before dependencies update to reflect current packages'],
         ],
       }
       # Packages whose names differ between Debian- and RedHat-based distros:
@@ -152,8 +152,8 @@ class cspace_server_dependencies {
       package { 'imagemagick':
         ensure  => latest,
         require => [
-          Notify [ 'Ensuring ImageMagick' ],
-          Exec [ 'Update apt-get before dependencies update to reflect current packages' ],
+          Notify['Ensuring ImageMagick'],
+          Exec['Update apt-get before dependencies update to reflect current packages'],
         ],
       }
       # The following package (and its equivalent for RedHat-based distros) is required
@@ -162,62 +162,62 @@ class cspace_server_dependencies {
       package { 'ruby-augeas':
         ensure  => latest,
         require => [
-          Notify [ 'Ensuring Augeas' ],
-          Exec [ 'Update apt-get before dependencies update to reflect current packages' ],
+          Notify['Ensuring Augeas'],
+          Exec['Update apt-get before dependencies update to reflect current packages'],
         ],
-      }     
+      }
     }
 
-    RedHat: {
+    'RedHat': {
       package { 'ant':
         ensure  => latest,
-        require => Notify [ 'Ensuring Ant' ],
+        require => Notify['Ensuring Ant'],
       }
       package { 'curl':
         ensure  => latest,
-        require => Notify [ 'Ensuring Curl' ],
+        require => Notify['Ensuring Curl'],
       }
       package { 'ftp':
         ensure  => latest,
-        require => Notify [ 'Ensuring Ftp' ],
+        require => Notify['Ensuring Ftp'],
       }
       package { 'git':
         ensure  => latest,
-        require => Notify [ 'Ensuring Git' ],
+        require => Notify['Ensuring Git'],
       }
       package { 'maven':
         ensure  => latest,
-        require => Notify [ 'Ensuring Maven' ],
+        require => Notify['Ensuring Maven'],
       }
       package { 'wget':
         ensure  => latest,
-        require => Notify [ 'Ensuring Wget' ],
+        require => Notify['Ensuring Wget'],
       }
       # Packages whose names differ between Debian- and RedHat-based distros:
       #
       # Equivalent to Debian's 'imagemagick', above.
       package { 'ImageMagick':
         ensure  => latest,
-        require => Notify [ 'Ensuring ImageMagick' ],
+        require => Notify['Ensuring ImageMagick'],
       }
-      # Equivalent to Debian's 'libaugeas-ruby', above.      
+      # Equivalent to Debian's 'libaugeas-ruby', above.
       package { 'ruby-augeas':
         ensure  => latest,
-        require => Notify [ 'Ensuring Augeas' ],
+        require => Notify['Ensuring Augeas'],
       }
     }
-    
+
     # OS X
-    darwin: {
+    'darwin': {
     }
-    
+
     # Microsoft Windows
-    windows: {
+    'windows': {
     }
-  
-    default: {
+
+    'default': {
     }
-    
+
   } # end case
-  
+
 }
